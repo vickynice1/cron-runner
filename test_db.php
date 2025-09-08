@@ -3,10 +3,10 @@
 // Simple PHP script to test MySQL database connection via GitHub Actions
 
 // Database credentials (replace with your hosting details)
-$host = "sql213.iceiy.com"; // e.g., localhost or db123.hosting.com
-$db   = "icei_39753956_Lumi";
-$user = "icei_39753956";
-$pass = "fbv9pLU0rkBc";
+$host = "sql213.ezyro.com"; // e.g., localhost or db123.hosting.com
+$db   = "ezyro_39753987_Lumi";
+$user = "ezyro_39753987";
+$pass = "3e7824f01de";
 
 try {
     // PDO connection
