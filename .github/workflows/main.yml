@@ -11,10 +11,10 @@ jobs:
     steps:
       - name: Get free proxy
         run: |
-          PROXY=$(curl -s "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=3000&country=all" | shuf -n 1)
+          PROXY=$(curl -s "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=3000&country=all" | shuf -n 1 | tr -d '\r\n')
           echo "Using proxy: $PROXY"
           echo "PROXY=$PROXY" >> $GITHUB_ENV
 
       - name: Call PHP script through proxy
         run: |
-          curl --proxy http://$PROXY https://lumi.unaux.com/daily_roi.php || echo "Failed with proxy"
+          curl --proxy http://$PROXY https://lumi.unaux.com/daily_roi.php -v || echo "Failed with proxy"
