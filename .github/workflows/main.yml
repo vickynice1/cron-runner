@@ -1,0 +1,13 @@
+name: Daily ROI Cron
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # runs once every day at midnight UTC
+  workflow_dispatch:       # lets you trigger manually
+
+jobs:
+  run-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call PHP script
+        run: curl -s https://lumi.unaux.com/daily_roi.php
