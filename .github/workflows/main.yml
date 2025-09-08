@@ -2,13 +2,19 @@ name: Daily ROI Cron
 
 on:
   schedule:
-    - cron: '0 0 * * *'   # runs once every day at midnight UTC
-  workflow_dispatch:       # allows manual trigger from GitHub UI
+    - cron: '0 0 * * *'   # every midnight UTC
+  workflow_dispatch:
 
 jobs:
   run-cron:
     runs-on: ubuntu-latest
     steps:
-      - name: Call PHP script
+      - name: Get free proxy
         run: |
-          curl --max-time 300 --retry 5 --retry-delay 10 -s -o /dev/null -w "%{http_code}\n" https://lumi.unaux.com/daily_roi.php
+          PROXY=$(curl -s "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=http&timeout=3000&country=all" | shuf -n 1)
+          echo "Using proxy: $PROXY"
+          echo "PROXY=$PROXY" >> $GITHUB_ENV
+
+      - name: Call PHP script through proxy
+        run: |
+          curl --proxy http://$PROXY https://lumi.unaux.com/daily_roi.php || echo "Failed with proxy"
