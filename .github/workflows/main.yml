@@ -3,11 +3,12 @@ name: Daily ROI Cron
 on:
   schedule:
     - cron: '0 0 * * *'   # runs once every day at midnight UTC
-  workflow_dispatch:       # lets you trigger manually
+  workflow_dispatch:       # allows manual trigger from GitHub UI
 
 jobs:
   run-cron:
     runs-on: ubuntu-latest
     steps:
       - name: Call PHP script
-        run: curl -s https://lumi.unaux.com/daily_roi.php
+        run: |
+          curl --max-time 300 --retry 5 --retry-delay 10 -s -o /dev/null -w "%{http_code}\n" https://lumi.unaux.com/daily_roi.php
