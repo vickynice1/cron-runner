@@ -1,28 +1,12 @@
-name: Daily ROI Cron
+name: Test PHP MySQL Connection
 
 on:
-  schedule:
-    - cron: '0 0 * * *'   # every midnight UTC
-  workflow_dispatch:
+  workflow_dispatch: # manual trigger
 
 jobs:
-  run-cron:
+  run-db-test:
     runs-on: ubuntu-latest
     steps:
-      - name: Run PHP script with free HTTPS proxy
-        run: |
-          SUCCESS=0
-          for i in {1..5}; do
-            PROXY=$(curl -s "https://api.proxyscrape.com/v2/?request=displayproxies&protocol=https&timeout=3000&country=all" | shuf -n 1 | tr -d '\r\n')
-            echo "Trying proxy: $PROXY"
-            if curl --proxy https://$PROXY https://lumi.unaux.com/daily_roi.php -s --max-time 10; then
-              echo "Success with proxy $PROXY"
-              SUCCESS=1
-              break
-            else
-              echo "Failed with $PROXY, retrying..."
-            fi
-          done
-          if [ $SUCCESS -eq 0 ]; then
-            echo "All proxies failed. Consider running without proxy if host allows."
-          fi
+      - uses: actions/checkout@v3
+      - name: Run PHP DB Test
+        run: php test_db.php
